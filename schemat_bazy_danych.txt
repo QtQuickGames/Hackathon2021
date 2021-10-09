@@ -1,0 +1,130 @@
+CREATE TABLE region
+(
+ name       text NOT NULL,
+ id_default int NOT NULL,
+ date_from  date NOT NULL,
+ date_to    date NOT NULL,
+ "id"         int NOT NULL,
+ CONSTRAINT PK_88 PRIMARY KEY ( "id" ),
+ CONSTRAINT FK_82 FOREIGN KEY ( id_default ) REFERENCES region ( "id" )
+);
+
+CREATE INDEX fkIdx_84 ON region
+(
+ id_default
+);
+
+CREATE TABLE garbage_types
+(
+ "id"   int NOT NULL,
+ name text NOT NULL,
+ CONSTRAINT PK_11 PRIMARY KEY ( "id" )
+);
+
+CREATE TABLE categories
+(
+ "id"        int NOT NULL,
+ name      text NOT NULL,
+ date_to   date NOT NULL,
+ date_from date NOT NULL,
+ CONSTRAINT PK_24 PRIMARY KEY ( "id" )
+);
+
+CREATE TABLE product_type
+(
+ "id"          int NOT NULL,
+ id_category int NOT NULL,
+ name        text NOT NULL,
+ date_from   date NOT NULL,
+ date_to     date NOT NULL,
+ CONSTRAINT PK_30 PRIMARY KEY ( "id" ),
+ CONSTRAINT FK_31 FOREIGN KEY ( id_category ) REFERENCES categories ( "id" )
+);
+
+CREATE INDEX fkIdx_33 ON product_type
+(
+ id_category
+);
+
+CREATE TABLE garbage_types_in_region
+(
+ id_region       int NOT NULL,
+ id_garbage_type int NOT NULL,
+ date_from       date NOT NULL,
+ date_to         date NOT NULL,
+ "id"              int NOT NULL,
+ CONSTRAINT PK_89 PRIMARY KEY ( "id" ),
+ CONSTRAINT FK_16 FOREIGN KEY ( id_region ) REFERENCES region ( "id" ),
+ CONSTRAINT FK_19 FOREIGN KEY ( id_garbage_type ) REFERENCES garbage_types ( "id" )
+);
+
+CREATE INDEX fkIdx_18 ON garbage_types_in_region
+(
+ id_region
+);
+
+CREATE INDEX fkIdx_21 ON garbage_types_in_region
+(
+ id_garbage_type
+);
+
+CREATE TABLE product
+(
+ "id"              int NOT NULL,
+ id_product_type int NOT NULL,
+ name            text NOT NULL,
+ barcode         text NOT NULL,
+ qrcode          text NOT NULL,
+ date_from       date NOT NULL,
+ date_to         date NOT NULL,
+ CONSTRAINT PK_39 PRIMARY KEY ( "id" ),
+ CONSTRAINT FK_40 FOREIGN KEY ( id_product_type ) REFERENCES product_type ( "id" )
+);
+
+CREATE INDEX fkIdx_42 ON product
+(
+ id_product_type
+);
+
+CREATE TABLE garbage_part_type
+(
+ "id"                        int NOT NULL,
+ name                      text NOT NULL,
+ id_garbage_type_in_region int NOT NULL,
+ CONSTRAINT PK_70 PRIMARY KEY ( "id" ),
+ CONSTRAINT FK_72 FOREIGN KEY ( id_garbage_type_in_region ) REFERENCES garbage_types_in_region ( "id" )
+);
+
+CREATE INDEX fkIdx_74 ON garbage_part_type
+(
+ id_garbage_type_in_region
+);
+
+CREATE TABLE parts
+(
+ "id"                   int NOT NULL,
+ id_product_type      int NOT NULL,
+ id_garbage_part_type int NOT NULL,
+ date_from            date NOT NULL,
+ date_to              date NOT NULL,
+ CONSTRAINT PK_92 PRIMARY KEY ( "id" ),
+ CONSTRAINT FK_51 FOREIGN KEY ( id_product_type ) REFERENCES product_type ( "id" ),
+ CONSTRAINT FK_78 FOREIGN KEY ( id_garbage_part_type ) REFERENCES garbage_part_type ( "id" )
+);
+
+CREATE INDEX fkIdx_53 ON parts
+(
+ id_product_type
+);
+
+CREATE INDEX fkIdx_80 ON parts
+(
+ id_garbage_part_type
+);
+
+
+
+
+
+
+
